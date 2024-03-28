@@ -72,6 +72,10 @@ string Course ::get_program()
 
 int main(){
    int count = 0;
+   int ci[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+   int cc[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+   int ce[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+   int cm[8] = {0, 0, 0, 0, 0, 0, 0, 0};
    ifstream in;
    string content;
    string fname;
@@ -90,4 +94,177 @@ int main(){
    {
       arr[i].read_data();
    }
+    for (int i = 0; i < count; i++)
+
+   {
+      if (arr[i].get_sem() == 1)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[0]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[0]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[0]++;
+         }
+      }
+      else if (arr[i].get_sem() == 2)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[1]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[1]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[1]++;
+         }
+      }
+      else if (arr[i].get_sem() == 3)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[2]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[2]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[2]++;
+         }
+      }
+      else if (arr[i].get_sem() == 4)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[3]++; // count ict
+         }
+         else if (arr[i].get_program() == "CS")
+         {
+            cc[3]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[3]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[3]++;
+         }
+      }
+      else if (arr[i].get_sem() == 5)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[4]++; // count ict
+         }
+         else if (arr[i].get_program() == "CS")
+         {
+            cc[4]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[4]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[4]++;
+         }
+      }
+      else if (arr[i].get_sem() == 6)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[5]++; // count ict
+         }
+         else if (arr[i].get_program() == "CS")
+         {
+            cc[5]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[5]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cm[5]++;
+         }
+      }
+      else if (arr[i].get_sem() == 7)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[6]++; // count ict
+         }
+         else if (arr[i].get_program() == "CS")
+         {
+            cc[6]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[6]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cc[6]++;
+         }
+      }
+      else if (arr[i].get_sem() == 8)
+      {
+         if (arr[i].get_program() == "ICTB")
+         {
+            ci[7]++; // count ict
+         }
+         else if (arr[i].get_program() == "CS")
+         {
+            cc[7]++;
+         }
+
+         else if (arr[i].get_program() == "EVD")
+         {
+            ce[7]++;
+         }
+
+         else if (arr[i].get_program() == "MNC")
+         {
+            cc[7]++;
+         }
+      }
+   }
+   int m1 = max({ci[0], ci[1], ci[2], ci[3], ci[4], ci[5], ci[6], ci[7]});
+   int m2 = max({cc[0], cc[1], cc[2], cc[3], cc[4], cc[5], cc[6], cc[7]});
+   int m3 = max({cm[0], cm[1], cm[2], cm[3], cm[4], cm[5], cm[6], cm[7]});
+   int m4 = max({ce[0], ce[1], ce[2], ce[3], ce[4], ce[5], ce[6], ce[7]});
+   int m_final = max({m1, m2, m3, m4});
+   cout << m_final;
+
+   slot s[m_final];
+   
+   return 0;
 }
+
+
+
