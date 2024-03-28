@@ -69,3 +69,25 @@ string Course ::get_program()
 {
    return program;
 }
+
+int main(){
+   int count = 0;
+   ifstream in;
+   string content;
+   string fname;
+   cout<<"Enter the name of the input CSV file : ";
+   cin>>fname;
+   in.open(fname);
+   in2.open(fname);
+   while (in.peek() != EOF)
+   {
+      getline(in, content);
+      count++;                   //total no.of courses
+   }
+   cout << "Count is : " << count << endl;
+   Course arr[count];
+   for (int i = 0; i < count; i++)
+   {
+      arr[i].read_data();
+   }
+}
