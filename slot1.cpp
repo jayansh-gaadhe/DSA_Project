@@ -57,53 +57,12 @@ class Slot
     int slot_num;
     int lec;
     int count;
-    char **prof;
+
     int ICTA[9];
     int ICTB[9];
     int CS[9];
     int MNC[9];
     int EVD[9];
-
-    /*string ICTA1;
-    string ICTB1;
-    string CS1;
-    string MNC1;
-    string EVD1;
-    string ICTA2;
-    string ICTB2;
-    string CS2;
-    string MNC2;
-    string EVD2;
-    string ICTA3;
-    string ICTB3;
-    string CS3;
-    string MNC3;
-    string EVD3;
-    string ICTA4;
-    string ICTB4;
-    string CS4;
-    string MNC4;
-    string EVD4;
-    string ICTA5;
-    string ICTB5;
-    string CS5;
-    string MNC5;
-    string EVD5;
-    string ICTA6;
-    string ICTB6;
-    string CS6;
-    string MNC6;
-    string EVD6;
-    string ICTA7;
-    string ICTB7;
-    string CS7;
-    string MNC7;
-    string EVD7;
-    string ICTA8;
-    string ICTB8;
-    string CS8;
-    string MNC8;
-    string EVD8;*/
 public:
     Slot() {}
     void initialize_slot(int n, int l)
@@ -157,7 +116,6 @@ void Slot ::make_slot(int size, Course *arr)
             prof[count] = arr[i].get_faculty();
             count++;
             fac++;
-
             cout << arr[i].get_code() << " " << arr[i].get_course() << " " << arr[i].get_program() << " " << arr[i].get_slot() << " " << arr[i].get_lecture() << endl;
         }
         else if (arr[i].get_program() == "ICTB" && ICTB[arr[i].get_sem()] != 1)
@@ -200,7 +158,6 @@ void Slot ::make_slot(int size, Course *arr)
                     CS[arr[j].get_sem()] = 1;
                     prof[count] = arr[j].get_faculty();
                     count++;
-
                     cout << arr[i].get_code() << " " << arr[i].get_course() << " " << arr[i].get_program() << " " << arr[i].get_slot() << " " << arr[i].get_lecture() << endl;
                 }
             }
@@ -284,185 +241,6 @@ string Course ::get_program()
 {
     return program;
 }
-
-int count_slot(int size, Course arr[])
-{
-    int ci[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    int cc[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    int ce[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    int cm[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    for (int i = 0; i < size; i++)
-
-    {
-        if (!arr[i].isCore())
-        {
-            continue;
-        }
-        if (arr[i].get_sem() == 1)
-        {
-            if (arr[i].get_program() == "ICTA")
-            {
-                ci[0]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[0]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[0]++;
-            }
-        }
-        else if (arr[i].get_sem() == 2)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[1]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[1]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[1]++;
-            }
-        }
-        else if (arr[i].get_sem() == 3)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[2]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[2]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[2]++;
-            }
-        }
-        else if (arr[i].get_sem() == 4)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[3]++; // count ict
-            }
-            else if (arr[i].get_program() == "CS")
-            {
-                cc[3]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[3]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[3]++;
-            }
-        }
-        else if (arr[i].get_sem() == 5)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[4]++; // count ict
-            }
-            else if (arr[i].get_program() == "CS")
-            {
-                cc[4]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[4]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[4]++;
-            }
-        }
-        else if (arr[i].get_sem() == 6)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[5]++; // count ict
-            }
-            else if (arr[i].get_program() == "CS")
-            {
-                cc[5]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[5]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[5]++;
-            }
-        }
-        else if (arr[i].get_sem() == 7)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[6]++; // count ict
-            }
-            else if (arr[i].get_program() == "CS")
-            {
-                cc[6]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[6]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[6]++;
-            }
-        }
-        else if (arr[i].get_sem() == 8)
-        {
-            if (arr[i].get_program() == "ICTB")
-            {
-                ci[7]++; // count ict
-            }
-            else if (arr[i].get_program() == "CS")
-            {
-                cc[7]++;
-            }
-
-            else if (arr[i].get_program() == "EVD")
-            {
-                ce[7]++;
-            }
-
-            else if (arr[i].get_program() == "MNC")
-            {
-                cm[7]++;
-            }
-        }
-    }
-    int m1 = max({ci[0], ci[1], ci[2], ci[3], ci[4], ci[5], ci[6], ci[7]});
-    int m2 = max({cc[0], cc[1], cc[2], cc[3], cc[4], cc[5], cc[6], cc[7]});
-    int m3 = max({cm[0], cm[1], cm[2], cm[3], cm[4], cm[5], cm[6], cm[7]});
-    int m4 = max({ce[0], ce[1], ce[2], ce[3], ce[4], ce[5], ce[6], ce[7]});
-    int m_final = max({m1, m2, m3, m4});
-    return m_final;
-}
-
 void count_n_lecture_courses(int size, Course arr[], string prog, int sem, int *count)
 {
     int i = 0;
@@ -663,7 +441,5 @@ int main()
     /*for(int i=0;i<count;i++){
         cout<<arr[i].get_code() <<" "<<arr[i].get_course()<<" "<<arr[i].get_program()<<" "<<arr[i].get_slot()<<endl;
     }*/
-
     return 0;
-    
 }
