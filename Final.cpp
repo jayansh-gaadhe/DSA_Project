@@ -4,6 +4,108 @@ ifstream in2;
 class Course;
 class Hash;
 class slot;
+#include <iostream>
+using namespace std;
+
+class node
+{
+public:
+    int sl_num, priority;
+    node *next;
+};
+
+class PriorityQ
+{
+private:
+    node *head;
+
+public:
+    PriorityQ()
+    {
+        head = NULL;
+    }
+
+    void dequeue();
+    void enqueue(int, int);
+    void display();
+    int front_priority();
+    int front_sl_num();
+    void dequeue_in_between(int slot);
+    int size();
+};
+int PriorityQ ::size()
+{
+    node *p = head;
+    int s = 0;
+    while (p != NULL)
+    {
+        p = p->next;
+        s++;
+    }
+    return s;
+}
+int PriorityQ ::front_priority()
+{
+    return head->priority;
+}
+int PriorityQ ::front_sl_num()
+{
+    return head->sl_num;
+}
+void PriorityQ::enqueue(int x, int pri)
+{
+    node *newnode = new node;
+    newnode->sl_num = x;
+    newnode->priority = pri;
+    newnode->next = NULL;
+
+    if (head == NULL || pri > head->priority)
+    {
+        newnode->next = head;
+        head = newnode;
+    }
+    else
+    {
+        node *p = head;
+        while (p->next != NULL && pri < p->next->priority)
+        {
+            p = p->next;
+        }
+        newnode->next = p->next;
+        p->next = newnode;
+    }
+}
+
+void PriorityQ ::dequeue()
+{
+    int x = -1;
+    if (head == NULL)
+    {
+        cout << "Priority Queue is empty!" << endl;
+    }
+    else
+    {
+        node *p = head;
+        x = head->sl_num;
+        if (head->next == NULL)
+            head = NULL;
+        else
+            head = head->next;
+        delete p;
+    }
+    return;
+}
+
+/*void PriorityQ ::display()
+{
+    node *p = head;
+    while (p != NULL)
+    {
+        cout << "data: " << p->sl_num << " and ";
+        cout << "Priority: " << p->priority << endl;
+        p = p->next;
+    }
+}*/
 
 class Hash
 {
@@ -612,7 +714,7 @@ int repeat_slot_in_day(int d, int sl_day[], int slot_num)
     }
     return 0;
 }
-void make_time_table(int total, slot *s)
+/*void make_time_table(int total, slot *s)
 {
 
     //   int arr[6][6] = {{0}, {0}, {0}, {0}, {0},{0}}; // we have total 25 place to put slot in 1 week;
@@ -685,16 +787,17 @@ void make_time_table(int total, slot *s)
                  same_fac[7]=1;
              }
          }
-     }*/
+     }
     int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
     // tt=time table
     /*conditions for Time table
     1.one slot can not repeat on that day
     2.perticular faculty must not have two consecutive lecture
     3.perticular slot should be placed on the basis of lecture of that slot
-    */
+
     int filled_box = 0;
     int total_box = 0;
+    int freq_zero = 0;
     for (int i = 0; i < total; i++)
     {
         total_box += s[i].lecture;
@@ -723,84 +826,47 @@ void make_time_table(int total, slot *s)
                 filled_box++;
                 cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
                 continue;
-            }*/
-            if (j % 2 == 0)
+            }
+            if (i == 1)
             {
-
-                if (i == 1)
-                {
-                    for (int k = total - 1; k >= 0; k--)
-                    {
-
-                        if (s[k].lec_count < s[k].lecture)
-                        {
-                            tt[i][j] = k + 1;
-                            sl_day[d] = tt[i][j];
-                            s[k].lec_count++;
-                            d++;
-                            filled_box++;
-                            cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
-                            break;
-                        }
-                    }
-                    continue;
-                }
                 for (int k = total - 1; k >= 0; k--)
                 {
-                    if (filled_box == total_box)
-                    {
-                        break;
-                    }
-                    if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
-                    {
-                        continue;
-                    }
-                    if (repeat_slot_in_day(d, sl_day, k + 1))
-                    {
-                        continue;
-                    }
-                    if (s[k].lec_count < s[k].lecture)
-                    {
-                        tt[i][j] = s[k].slot_num;
-                        sl_day[d] = tt[i][j];
-                        s[k].lec_count++;
-                        d++;
-                        filled_box++;
-                        cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if (i == 1)
-                {
-                    for (int k = 0; k <total; k++)
-                    {
+                    /*   int ran=0;
+                    for(int l=1;l<=total;l++){
+                        for(int m=1;m<=5;m++){
+                            if(l==tt[m][j-1]){
+                                if(s[l].lec_count<s[l].lecture){
 
-                        if (s[k].lec_count < s[k].lecture)
-                        {
-                            tt[i][j] = k + 1;
-                            sl_day[d] = tt[i][j];
-                            s[k].lec_count++;
-                            d++;
-                            filled_box++;
-                            cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                                    ran=l;
+                                    break;
+                                }
+                            }
+                        }
+                        if(ran!=0){
                             break;
                         }
                     }
-                    continue;
-                }
-                for (int k =0; k<total; k++)
-                {
-                    if (filled_box == total_box)
+                    if (s[k].lec_count < s[k].lecture)
                     {
+                        tt[i][j] = k + 1;
+                        sl_day[d] = tt[i][j];
+                        s[k].lec_count++;
+                        d++;
+                        filled_box++;
+                        cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                         break;
                     }
-                    if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
-                    {
-                        continue;
-                    }
+                }
+                continue;
+            }
+            for (int k = total - 1; k >= 0; k--)
+            {
+                if (filled_box == total_box)
+                {
+                    break;
+                }
+                if (tt[i - 1][j] == 0)
+                {
                     if (repeat_slot_in_day(d, sl_day, k + 1))
                     {
                         continue;
@@ -815,6 +881,25 @@ void make_time_table(int total, slot *s)
                         cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                         break;
                     }
+                }
+                if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
+                {
+                    continue;
+                }
+                if (repeat_slot_in_day(d, sl_day, k + 1))
+                {
+
+                    continue;
+                }
+                if (s[k].lec_count < s[k].lecture)
+                {
+                    tt[i][j] = s[k].slot_num;
+                    sl_day[d] = tt[i][j];
+                    s[k].lec_count++;
+                    d++;
+                    filled_box++;
+                    cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                    break;
                 }
             }
         }
@@ -828,8 +913,214 @@ void make_time_table(int total, slot *s)
         cout << endl;
     }
     cout << "Gautam";
+}*/
+void PriorityQ ::display()
+{
+    node *p = head;
+    while (p != NULL)
+    {
+        cout << "data: " << p->sl_num << " and ";
+        cout << "Priority: " << p->priority << endl;
+        p = p->next;
+    }
 }
+void PriorityQ ::dequeue_in_between(int slot)
+{
+    node *p;
+    node *q;
+    p = head;
+    q = head->next;
+    if (p->sl_num == slot)
+    {
+        head = q;
+        delete (p);
+        return;
+    }
+    while (q != NULL && q->sl_num != slot)
+    {
+        p = p->next;
+        q = q->next;
+    }
+    if (q == NULL)
+    {
+        return;
+    }
+    // enqueue(q->sl_num, q->priority - 1);
+    p->next = q->next;
+    delete (q);
+}
+void make_time_table(int total, slot *s)
+{
+    PriorityQ p;
+    int filled_box = 0;
+    int total_box = 0;
+    int freq_zero = 0;
+    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
 
+    for (int i = 0; i < total; i++)
+    {
+        total_box += s[i].lecture;
+    }
+    for (int i = 0; i < total; i++)
+    {
+        p.enqueue(s[i].slot_num, s[i].lecture);
+    }
+    p.enqueue(0, 25 - total_box);
+    // p.display();
+
+    for (int j = 1; j <= 5; j++)
+    {
+        if (filled_box == 25)
+        {
+            break;
+        }
+        if (p.size() == 0)
+        {
+            break;
+        }
+        int sl_day[5] = {0}; // slots of day
+        int d = 0;
+        for (int i = 1; i <= 5; i++)
+        {
+            if (j == 5)
+            {
+                p.display();
+            }
+            if (filled_box == 25)
+            {
+                break;
+            }
+            if (p.size() == 0)
+            {
+                break;
+            }
+            if (j == 5)
+            {
+                p.dequeue_in_between(0);
+            }
+            if (p.size() == 1 && p.front_priority() == 1)
+            {
+
+                tt[i][j] = p.front_sl_num();
+                filled_box = 25;
+                //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                break;
+            }
+            if (i == 1)
+            {
+                if (p.front_priority() != 1)
+                {
+
+                    p.enqueue(p.front_sl_num(), p.front_priority() - 1);
+                }
+                tt[i][j] = p.front_sl_num();
+                sl_day[d] = tt[i][j];
+                d++;
+                filled_box++;
+                p.dequeue();
+                //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                continue;
+            }
+            else
+            {
+                int ck = 0;
+                if (tt[i - 1][j] == 0)
+                {
+                    int sl[total];
+                    int pri[total];
+                    int cnt = 0;
+                    while (ck != 1)
+                    {
+                        if (repeat_slot_in_day(d, sl_day, p.front_sl_num()))
+                        {
+                            if (p.front_sl_num() == 0 && p.front_priority() == 1)
+                            {
+                                p.dequeue();
+                                filled_box++;
+                                continue;
+                            }
+                            sl[cnt] = p.front_sl_num();
+                            pri[cnt] = p.front_priority();
+                            cnt++;
+                            p.dequeue();
+                            continue;
+                        }
+                        else
+                        {
+                            if (p.front_priority() != 1)
+                            {
+                                p.enqueue(p.front_sl_num(), p.front_priority() - 1);
+                            }
+                            tt[i][j] = p.front_sl_num();
+                            sl_day[d] = tt[i][j];
+                            d++;
+                            filled_box++;
+                            p.dequeue();
+                            //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            for (int m = 0; m < cnt; m++)
+                            {
+                                p.enqueue(sl[m], pri[m]);
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    int sl[total];
+                    int pri[total];
+                    int cnt = 0;
+                    while (ck != 1)
+                    {
+                        if (repeat_slot_in_day(d, sl_day, p.front_sl_num()) || repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[p.front_sl_num()]))
+                        {
+
+                            cout << p.front_sl_num() << " " << p.front_priority() << endl;
+                            if (p.front_sl_num() == 0 && p.front_priority() == 1)
+                            {
+
+                                p.dequeue();
+                                filled_box++;
+                                continue;
+                            }
+                            sl[cnt] = p.front_sl_num();
+                            pri[cnt] = p.front_priority();
+                            cnt++;
+                            p.dequeue();
+                            continue;
+                        }
+                        else
+                        {
+                            if (p.front_priority() != 1)
+                            {
+                                p.enqueue(p.front_sl_num(), p.front_priority() - 1);
+                            }
+                            tt[i][j] = p.front_sl_num();
+                            sl_day[d] = tt[i][j];
+                            d++;
+                            filled_box++;
+                            p.dequeue();
+                            //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            for (int m = 0; m < cnt; m++)
+                            {
+                                p.enqueue(sl[m], pri[m]);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (int i = 1; i <= 5; i++)
+    {
+        for (int j = 1; j <= 5; j++)
+        {
+            cout << tt[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
 int main()
 {
     int count = 0;
@@ -863,19 +1154,20 @@ int main()
     slot sl[tot_slot];
 
     int sl_num = 1;
+    for (int i = 0; i < max_course[3]; i++)
+    {
+        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
+        sl_num++;
+    }
     for (int i = 0; i < max_course[2]; i++)
     {
         sl[sl_num - 1].initialize_slot(sl_num, 2, count);
         sl_num++;
     }
+
     for (int i = 0; i < max_course[1]; i++)
     {
         sl[sl_num - 1].initialize_slot(sl_num, 1, count);
-        sl_num++;
-    }
-    for (int i = 0; i < max_course[3]; i++)
-    {
-        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
         sl_num++;
     }
 
