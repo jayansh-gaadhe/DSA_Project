@@ -81,7 +81,7 @@ void PriorityQ ::dequeue()
     int x = -1;
     if (head == NULL)
     {
-        cout << "Priority Queue is empty!" << endl;
+        //cout << "Priority Queue is empty!" << endl;
     }
     else
     {
@@ -208,7 +208,7 @@ public:
     void set_type(string t, int i);
     string get_type(int i);
     friend void display_slot_in_csv(int tot_sl, slot sl[]);
-    friend void make_time_table(int total, slot s[]);
+    friend void make_time_table(int total, slot s[], int (&tt)[6][6]);
     friend int repeat_fac_in_prev_slot(slot prev, slot curr);
 };
 
@@ -949,13 +949,12 @@ void PriorityQ ::dequeue_in_between(int slot)
     p->next = q->next;
     delete (q);
 }
-void make_time_table(int total, slot *s)
+void make_time_table(int total, slot *s, int (&tt)[6][6])
 {
     PriorityQ p;
     int filled_box = 0;
     int total_box = 0;
     int freq_zero = 0;
-    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
 
     for (int i = 0; i < total; i++)
     {
@@ -966,7 +965,7 @@ void make_time_table(int total, slot *s)
         p.enqueue(s[i].slot_num, s[i].lecture);
     }
     p.enqueue(0, 25 - total_box);
-    // p.display();
+    
 
     for (int j = 1; j <= 5; j++)
     {
@@ -982,10 +981,7 @@ void make_time_table(int total, slot *s)
         int d = 0;
         for (int i = 1; i <= 5; i++)
         {
-            if (j == 5)
-            {
-                p.display();
-            }
+            
             if (filled_box == 25)
             {
                 break;
@@ -1003,7 +999,7 @@ void make_time_table(int total, slot *s)
 
                 tt[i][j] = p.front_sl_num();
                 filled_box = 25;
-                //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                 break;
             }
             if (i == 1)
@@ -1018,7 +1014,7 @@ void make_time_table(int total, slot *s)
                 d++;
                 filled_box++;
                 p.dequeue();
-                //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                 continue;
             }
             else
@@ -1056,7 +1052,7 @@ void make_time_table(int total, slot *s)
                             d++;
                             filled_box++;
                             p.dequeue();
-                            //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                             for (int m = 0; m < cnt; m++)
                             {
                                 p.enqueue(sl[m], pri[m]);
@@ -1100,7 +1096,7 @@ void make_time_table(int total, slot *s)
                             d++;
                             filled_box++;
                             p.dequeue();
-                            //cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                             for (int m = 0; m < cnt; m++)
                             {
                                 p.enqueue(sl[m], pri[m]);
@@ -1112,15 +1108,44 @@ void make_time_table(int total, slot *s)
             }
         }
     }
-    for (int i = 1; i <= 5; i++)
+    /*for (int i = 1; i <= 5; i++)
     {
         for (int j = 1; j <= 5; j++)
         {
             cout << tt[i][j] << " ";
         }
         cout << endl;
+    }*/
+}
+
+void tt_in_csv(int tt[6][6])
+{
+    ofstream out;
+    cout << "Enter the name of the csv file for time-table : ";
+    string fname;
+    cin >> fname;
+    out.open(fname);
+    out << "Time,Monday,Tuesday,Wednesday,Thursday,Friday" << endl;
+    int s = 8;
+    int e = 9;
+    for (int i = 1; i < 6; i++)
+    {
+        out << s << ":00 - " << e << ":00 , ";
+        for (int j = 1; j < 6; j++)
+        {
+            if (tt[i][j] == 0)
+            {
+                out << "Free , ";
+                continue;
+            }
+            out << "M" << tt[i][j] << " , ";
+        }
+        s++;
+        e++;
+        out << endl;
     }
 }
+
 int main()
 {
     int count = 0;
@@ -1136,7 +1161,7 @@ int main()
         getline(in, content);
         count++;
     }
-    cout << "Count is : " << count << endl;
+    //cout << "Count is : " << count << endl;
     Course arr[count];
     for (int i = 0; i < count; i++)
     {
@@ -1145,12 +1170,12 @@ int main()
 
     int max_course[5];
     no_of_slots(count, arr, max_course);
-    cout << "Maximum 3 lec : " << max_course[3] << endl;
+    /*cout << "Maximum 3 lec : " << max_course[3] << endl;
     cout << "Maximum 2 lec : " << max_course[2] << endl;
-    cout << "Maximum 1 lec : " << max_course[1] << endl;
+    cout << "Maximum 1 lec : " << max_course[1] << endl;*/
     int tot_slot = max_course[1] + max_course[2] + max_course[3];
-    cout << "Tota slots required : " << tot_slot << endl
-         << endl;
+    /*cout << "Tota slots required : " << tot_slot << endl
+         << endl;*/
     slot sl[tot_slot];
 
     int sl_num = 1;
@@ -1225,7 +1250,9 @@ int main()
     {
         sl[i].display_slot();
     }*/
-    // display_slot_in_csv(tot_slot, sl);
-    make_time_table(tot_slot, sl);
+    display_slot_in_csv(tot_slot, sl);
+    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
+    make_time_table(tot_slot, sl, tt);
+    tt_in_csv(tt);
     return 0;
 }
