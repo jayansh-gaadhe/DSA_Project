@@ -68,10 +68,12 @@ private:
     int slot_num;
     int sem[100];
     string fac[100];
+    int faculty = 0; // number of different faculties
     string type[100];
     // Course *a;
     int lecture;
-    int count;         // we use count for number of pg/code in this slot
+    int count; // we use count for number of pg/code in this slot
+    int lec_count = 0;
     int ICTA[8] = {0}; // these arrays are indicating that for particular program of a particular sem ,
                        // a course is alloted in the slot or not
     int ICTB[8] = {0};
@@ -97,10 +99,15 @@ public:
     void set_sem(int s, int i);
     void set_faculty(string f, int i);
     int get_sem(int i);
+    int get_lec_count();
+    void inc_lec_count(); // increment function
+    int get_lec();
     string get_faculty(int i);
     void set_type(string t, int i);
     string get_type(int i);
-    friend void display_slot_in_csv(int tot_sl,slot sl[]);
+    friend void display_slot_in_csv(int tot_sl, slot sl[]);
+    friend void make_time_table(int total, slot s[]);
+    friend int repeat_fac_in_prev_slot(slot prev, slot curr);
 };
 
 void slot ::set_sem(int s, int i)
@@ -130,7 +137,7 @@ string slot ::get_type(int i)
 
 void slot ::display_slot()
 {
-    //to display in terminal
+    // to display in terminal
     cout << "Slot : M" << slot_num << endl;
     for (int i = 0; i < count; i++)
     {
@@ -138,7 +145,18 @@ void slot ::display_slot()
     }
     cout << endl;
 }
-
+void slot ::inc_lec_count()
+{
+    lec_count++;
+}
+int slot ::get_lec_count()
+{
+    return lec_count;
+}
+int slot ::get_lec()
+{
+    return lecture;
+}
 class Course
 {
     string code;
@@ -479,7 +497,7 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 {
     string prof[65];
 
-    int fac = 0; // no of different faculties,whose courses are alloted this slot
+    faculty = 0; // no of different faculties,whose courses are alloted this slot
     count = 0;   //  counts how many courses are alloted this particular slot.
 
     for (int i = 0; i < h_size; i++)
@@ -490,12 +508,11 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
         ->Course is not Core
         ->All the course of hash are alloted in some other slot
         ->The Proffesor already have a course in this slot
-        -> One course of a particular program and sem is already there in the slot        
-        
+        -> One course of a particular program and sem is already there in the slot
+
         */
 
-
-        if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 || repeat_prof(h[i].chain.front().get_faculty(), prof, fac))
+        if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 || repeat_prof(h[i].chain.front().get_faculty(), prof, faculty))
         {
             continue;
         }
@@ -516,7 +533,7 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 
         for (auto j : h[i].chain)
         {
-            if (repeat_prof(j.get_faculty(), prof, fac) == 1)
+            if (repeat_prof(j.get_faculty(), prof, faculty) == 1)
             {
                 ck = 1;
                 break;
@@ -537,10 +554,10 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             type[count] = j.get_type();
             j.set_slot(slot_num);
 
-            if (repeat_prof(j.get_faculty(), prof, fac) == 0)
+            if (repeat_prof(j.get_faculty(), prof, faculty) == 0)
             {
-                prof[fac] = j.get_faculty();
-                fac++;
+                prof[faculty] = j.get_faculty();
+                faculty++;
             }
             fill(j);
             count++;
@@ -549,26 +566,232 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
     }
 }
 
-
-void display_slot_in_csv(int tot_sl,slot sl[]){
-    //to display in csv
+void display_slot_in_csv(int tot_sl, slot sl[])
+{
+    // to display in csv
     ofstream out;
-    string fname;//file name
-    cout<<"Enter the name of csv file to save the slots : ";
-    cin>>fname;
+    string fname; // file name
+    cout << "Enter the name of csv file to save the slots : ";
+    cin >> fname;
     out.open(fname);
-    for(int j=0;j<tot_sl;j++){
+    for (int j = 0; j < tot_sl; j++)
+    {
         out << "Slot : M" << sl[j].slot_num << endl;
-        out<<"SEM,PROGRAM,CODE,LECTURE,TYPE,FACULTY"<<endl;
-        
+        out << "SEM,PROGRAM,CODE,LECTURE,TYPE,FACULTY" << endl;
+
         for (int i = 0; i < sl[j].count; i++)
         {
             out << "Sem-" << sl[j].sem[i] << "," << sl[j].pg[i] << "," << sl[j].code[i] << "," << sl[j].lecture << "," << sl[j].type[i] << "," << sl[j].fac[i] << endl;
         }
-        out<< endl;
+        out << endl;
     }
 }
+int repeat_fac_in_prev_slot(slot prev, slot curr)
+{
 
+    for (int i = 0; i < prev.faculty; i++)
+    {
+        for (int j = 0; j < curr.faculty; j++)
+        {
+            if (prev.fac[i] == curr.fac[j])
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+int repeat_slot_in_day(int d, int sl_day[], int slot_num)
+{
+    for (int i = 0; i < d; i++)
+    {
+        if (sl_day[i] == slot_num)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+void make_time_table(int total, slot *s)
+{
+
+    //   int arr[6][6] = {{0}, {0}, {0}, {0}, {0},{0}}; // we have total 25 place to put slot in 1 week;
+    /* string slot_1_fac[s[0].count], slot_2_fac[s[1].count], slot_3_fac[s[2].count], slot_4_fac[s[3].count], slot_5_fac[s[4].count];
+     string slot_6_fac[s[5].count], slot_7_fac[s[6].count], slot_8_fac[s[7].count];
+
+     for (int j = 0; j < s[0].count; j++)
+     {
+         slot_1_fac[j] = s[0].get_faculty(j);
+     }
+     for (int j = 0; j < s[1].count; j++)
+     {
+         slot_2_fac[j] = s[1].get_faculty(j);
+     }
+     for (int j = 0; j < s[2].count; j++)
+     {
+         slot_3_fac[j] = s[2].get_faculty(j);
+     }
+     for (int j = 0; j < s[3].count; j++)
+     {
+         slot_4_fac[j] = s[3].get_faculty(j);
+     }
+     for (int j = 0; j < s[4].count; j++)
+     {
+         slot_5_fac[j] = s[4].get_faculty(j);
+     }
+     for (int j = 0; j < s[5].count; j++)
+     {
+         slot_6_fac[j] = s[5].get_faculty(j);
+     }
+     for (int j = 0; j < s[6].count; j++)
+     {
+         slot_7_fac[j] = s[6].get_faculty(j);
+     }
+     for (int j = 0; j < s[7].count; j++)
+     {
+         slot_8_fac[j] = s[7].get_faculty(j);
+     }
+     int same_fac[total];
+     for(int i=0;i<12;i++)
+     {
+         for(int j=0;j<12;j++)
+         {
+             if(slot_1_fac[i]==slot_2_fac[j])
+             {
+                 same_fac[1]=1;
+             }
+             if(slot_1_fac[i]==slot_3_fac[j])
+             {
+                 same_fac[2]=1;
+             }
+             if(slot_1_fac[i]==slot_4_fac[j])
+             {
+                 same_fac[3]=1;
+             }
+             if(slot_1_fac[i]==slot_5_fac[j])
+             {
+                 same_fac[4]=1;
+             }
+             if(slot_1_fac[i]==slot_6_fac[j])
+             {
+                 same_fac[5]=1;
+             }
+             if(slot_1_fac[i]==slot_7_fac[j])
+             {
+                 same_fac[6]=1;
+             }
+             if(slot_1_fac[i]==slot_8_fac[j])
+             {
+                 same_fac[7]=1;
+             }
+         }
+     }*/
+    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
+    // tt=time table
+    /*conditions for Time table
+    1.one slot can not repeat on that day
+    2.perticular faculty must not have two consecutive lecture
+    3.perticular slot should be placed on the basis of lecture of that slot
+    */
+    int filled_box = 0;
+    int total_box = 0;
+    for (int i = 0; i < total; i++)
+    {
+        total_box += s[i].lecture;
+    }
+
+    for (int j = 1; j <= 5; j++)
+    {
+        if (filled_box == total_box)
+        {
+            break;
+        }
+        int sl_day[5] = {0}; // slots of day
+        int d = 0;
+        for (int i = 1; i <= 5; i++)
+        {
+            if (filled_box == total_box)
+            {
+                break;
+            }
+            /*if (i == 1 && j == 1)
+            {
+                tt[i][j] = 1;
+                sl_day[d] = tt[i][j];
+                s[0].lec_count++;
+                d++;
+                filled_box++;
+                cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
+                continue;
+            }*/
+            if (i == 1)
+            {
+                for (int k =total-1; k >=0 ; k--){
+                    /*   int ran=0;
+                    for(int l=1;l<=total;l++){
+                        for(int m=1;m<=5;m++){
+                            if(l==tt[m][j-1]){
+                                if(s[l].lec_count<s[l].lecture){
+                                    
+                                    ran=l;
+                                    break;
+                                }
+                            }
+                        }
+                        if(ran!=0){
+                            break;
+                        }
+                    }*/
+                    if (s[k].lec_count < s[k].lecture)
+                    {
+                        tt[i][j] = k+1;
+                        sl_day[d] = tt[i][j];
+                        s[k].lec_count++;
+                        d++;
+                        filled_box++;
+                        cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
+                        break;
+                    }
+                }
+                continue;
+            }
+            for (int k = total-1; k >=0; k--)
+            {
+                if (filled_box == total_box)
+                {
+                    break;
+                }
+                if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
+                {
+                    continue;
+                }
+                if (repeat_slot_in_day(d, sl_day, k + 1))
+                {
+                    continue;
+                }
+                if (s[k].lec_count < s[k].lecture)
+                {
+                    tt[i][j] = s[k].slot_num;
+                    sl_day[d] = tt[i][j];
+                    s[k].lec_count++;
+                    d++;
+                    filled_box++;
+                    cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
+                    break;
+                }
+            }
+        }
+    }
+    for (int i = 1; i <= 5; i++)
+    {
+        for (int j = 1; j <= 5; j++)
+        {
+            cout << tt[i][j] << '\t';
+        }
+        cout << endl;
+    }
+    cout << "Gautam";
+}
 
 int main()
 {
@@ -603,9 +826,9 @@ int main()
     slot sl[tot_slot];
 
     int sl_num = 1;
-    for (int i = 0; i < max_course[3]; i++)
+    for (int i = 0; i < max_course[1]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
+        sl[sl_num - 1].initialize_slot(sl_num, 1, count);
         sl_num++;
     }
     for (int i = 0; i < max_course[2]; i++)
@@ -613,9 +836,9 @@ int main()
         sl[sl_num - 1].initialize_slot(sl_num, 2, count);
         sl_num++;
     }
-    for (int i = 0; i < max_course[1]; i++)
+    for (int i = 0; i < max_course[3]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 1, count);
+        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
         sl_num++;
     }
 
@@ -626,7 +849,7 @@ int main()
         if (repeat_course(t, arr[i].get_code(), temp) == 0 && arr[i].isCore())
         {
             temp[t] = arr[i].get_code();
-            cout << temp[t] << endl;
+
             t++;
         }
     }
@@ -666,14 +889,14 @@ int main()
         sl[i].make_slot(count, arr, t, h);
     }
     /*
-    
+
     ***Do not remove thi for loop ***
-    
+
     for (int i = 0; i < sl_num - 1; i++)
     {
         sl[i].display_slot();
     }*/
-    display_slot_in_csv(tot_slot,sl);
-
+    // display_slot_in_csv(tot_slot, sl);
+    make_time_table(tot_slot, sl);
     return 0;
 }
