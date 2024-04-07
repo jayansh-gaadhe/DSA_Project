@@ -72,12 +72,12 @@ private:
     // Course *a;
     int lecture;
     int count; // we use count for number of pg/code in this slot
-    int ICTA[8];        //these arrays are indicating that for particular program of a particular sem ,
+    int ICTA[8]={0};        //these arrays are indicating that for particular program of a particular sem ,
                         //a course is alloted in the slot or not
-    int ICTB[8];        
-    int CS[8];          
-    int MNC[8];
-    int EVD[8];
+    int ICTB[8]={0};        
+    int CS[8]={0};          
+    int MNC[8]={0};
+    int EVD[8]={0};
 
 public:
     void initialize_slot(int n, int l, int size)
@@ -85,11 +85,6 @@ public:
         slot_num = n;
         lecture = l;
         count = 0;
-        ICTA[1] = ICTA[2] = ICTA[3] = ICTA[4] = ICTA[5] = ICTA[6] = ICTA[7] = ICTA[8] = 0;
-        ICTB[1] = ICTB[2] = ICTB[3] = ICTB[4] = ICTB[5] = ICTB[6] = ICTB[7] = ICTB[8] = 0;
-        CS[1] = CS[2] = CS[3] = CS[4] = CS[5] = CS[6] = CS[7] = CS[8] = 0;
-        MNC[1] = MNC[2] = MNC[3] = MNC[4] = MNC[5] = MNC[6] = MNC[7] = MNC[8] = 0;
-        EVD[1] = EVD[2] = EVD[3] = EVD[4] = EVD[5] = EVD[6] = EVD[7] = EVD[8] = 0;
     }
     string get_code();
     string get_program();
@@ -482,6 +477,15 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 
     for (int i = 0; i < h_size; i++)
     {
+        /*
+        #Continue (skip the Course/Hash) if
+        ->Lecture of course is not matching with lecture of slots
+        ->Course is not Core
+        ->All the course of hash are alloted in some other slot
+        ->The Proffesor already have a course in this slot
+        -> One course of a particular program and sem is already there in the slot        
+        
+        */
         if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 || repeat_prof(h[i].chain.front().get_faculty(), prof, fac))
         {
             continue;
@@ -500,7 +504,7 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             continue;
         }
         ck=0;
-        
+
         for (auto j : h[i].chain)
         {
             if (repeat_prof(j.get_faculty(),prof,fac) == 1)
@@ -526,12 +530,12 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             
 
 
-            if (repeat_prof(j.get_faculty(), prof, fac) == 0)
+            if (repeat_prof(j.get_faculty(), prof, fac) == 0)   //If new professor comes, add it to the prof array. 
             {
                 prof[fac] = j.get_faculty();
                 fac++;
             }
-            fill(j);
+            fill(j);    //
             // a[count]=j;
             count++;
         }
