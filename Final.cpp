@@ -12,7 +12,7 @@ class Hash
     int flag;    // To indicate that particular hash(cource) is stored in a slot.
 
 public:
-    list<Course> chain;         //list of programs having same courses
+    list<Course> chain; // list of programs having same courses
 
     void set_code(string s);
     string get_code();
@@ -48,7 +48,7 @@ string Hash ::get_code()
 {
     return code;
 }
-int repeat_course(int size, string s, string arr[])     //To check that particular course is unique(means not stored in arr before.)
+int repeat_course(int size, string s, string arr[]) // To check that particular course is unique(means not stored in arr before.)
 {
     for (int i = 0; i < size; i++)
     {
@@ -71,13 +71,13 @@ private:
     string type[100];
     // Course *a;
     int lecture;
-    int count; // we use count for number of pg/code in this slot
-    int ICTA[8]={0};        //these arrays are indicating that for particular program of a particular sem ,
-                        //a course is alloted in the slot or not
-    int ICTB[8]={0};        
-    int CS[8]={0};          
-    int MNC[8]={0};
-    int EVD[8]={0};
+    int count;         // we use count for number of pg/code in this slot
+    int ICTA[8] = {0}; // these arrays are indicating that for particular program of a particular sem ,
+                       // a course is alloted in the slot or not
+    int ICTB[8] = {0};
+    int CS[8] = {0};
+    int MNC[8] = {0};
+    int EVD[8] = {0};
 
 public:
     void initialize_slot(int n, int l, int size)
@@ -94,41 +94,47 @@ public:
     void display_slot();
     int check_filled(Course c);
     void fill(Course &c);
-    void set_sem(int s,int i);
-    void set_faculty(string f,int i);
+    void set_sem(int s, int i);
+    void set_faculty(string f, int i);
     int get_sem(int i);
     string get_faculty(int i);
-    void set_type(string t,int i);
+    void set_type(string t, int i);
     string get_type(int i);
-
+    friend void display_slot_in_csv(int tot_sl,slot sl[]);
 };
 
-void slot :: set_sem(int s,int i){
-    sem[i]=s;
+void slot ::set_sem(int s, int i)
+{
+    sem[i] = s;
 }
-void slot :: set_faculty(string s,int i){
-    fac[i]=s;  
+void slot ::set_faculty(string s, int i)
+{
+    fac[i] = s;
 }
-int slot :: get_sem(int i){
+int slot ::get_sem(int i)
+{
     return sem[i];
 }
-string slot :: get_faculty(int i){
+string slot ::get_faculty(int i)
+{
     return fac[i];
 }
-void slot :: set_type(string t,int i){
-    type[i]=t;
+void slot ::set_type(string t, int i)
+{
+    type[i] = t;
 }
-string slot :: get_type(int i){
+string slot ::get_type(int i)
+{
     return type[i];
 }
 
-
 void slot ::display_slot()
 {
+    //to display in terminal
     cout << "Slot : M" << slot_num << endl;
     for (int i = 0; i < count; i++)
     {
-        cout <<"Sem-"<<sem[i]<<" "<< pg[i] << " "<<code[i] << " "<<lecture<<" " <<type[i]<<" "<<fac[i]<< endl;
+        cout << "Sem-" << sem[i] << " " << pg[i] << " " << code[i] << " " << lecture << " " << type[i] << " " << fac[i] << endl;
     }
     cout << endl;
 }
@@ -142,8 +148,8 @@ class Course
     int lecture;
     string program;
     int sem;
-    int ass_slot;           //ass_slot=0 ,if non slot is assigned to the course
-                            //ass_alot= slot_number , if a slot assigned to the course
+    int ass_slot; // ass_slot=0 ,if non slot is assigned to the course
+                  // ass_alot= slot_number , if a slot assigned to the course
 
 public:
     Course()
@@ -163,7 +169,8 @@ public:
     string get_faculty();
     string get_type();
 };
-string Course :: get_type(){
+string Course ::get_type()
+{
     return type;
 }
 
@@ -184,9 +191,9 @@ string Course ::get_faculty()
     return faculty;
 }
 
-bool repeat_prof(string c, string prof[], int count)        //To check that in one slot a particular proffesor has only one course.
-                                                            //i.e. one faculty should have only one course in a single slot.
-{
+bool repeat_prof(string c, string prof[], int count)
+{ // To check that in one slot a particular proffesor has only one course.
+  // i.e. one faculty should have only one course in a single slot.
     for (int i = 0; i < count; i++)
     {
         if (prof[i] == c)
@@ -486,6 +493,8 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
         -> One course of a particular program and sem is already there in the slot        
         
         */
+
+
         if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 || repeat_prof(h[i].chain.front().get_faculty(), prof, fac))
         {
             continue;
@@ -503,11 +512,11 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
         {
             continue;
         }
-        ck=0;
+        ck = 0;
 
         for (auto j : h[i].chain)
         {
-            if (repeat_prof(j.get_faculty(),prof,fac) == 1)
+            if (repeat_prof(j.get_faculty(), prof, fac) == 1)
             {
                 ck = 1;
                 break;
@@ -520,28 +529,46 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 
         for (auto j : h[i].chain)
         {
-            
+
             code[count] = h[i].get_code();
             pg[count] = j.get_program();
-            sem[count]=j.get_sem();
-            set_faculty(j.get_faculty(),count);
-            type[count]=j.get_type();
+            sem[count] = j.get_sem();
+            set_faculty(j.get_faculty(), count);
+            type[count] = j.get_type();
             j.set_slot(slot_num);
-            
 
-
-            if (repeat_prof(j.get_faculty(), prof, fac) == 0)   //If new professor comes, add it to the prof array. 
+            if (repeat_prof(j.get_faculty(), prof, fac) == 0)
             {
                 prof[fac] = j.get_faculty();
                 fac++;
             }
-            fill(j);    //
-            // a[count]=j;
+            fill(j);
             count++;
         }
         h[i].set_flag(1);
     }
 }
+
+
+void display_slot_in_csv(int tot_sl,slot sl[]){
+    //to display in csv
+    ofstream out;
+    string fname;//file name
+    cout<<"Enter the name of csv file to save the slots : ";
+    cin>>fname;
+    out.open(fname);
+    for(int j=0;j<tot_sl;j++){
+        out << "Slot : M" << sl[j].slot_num << endl;
+        out<<"SEM,PROGRAM,CODE,LECTURE,TYPE,FACULTY"<<endl;
+        
+        for (int i = 0; i < sl[j].count; i++)
+        {
+            out << "Sem-" << sl[j].sem[i] << "," << sl[j].pg[i] << "," << sl[j].code[i] << "," << sl[j].lecture << "," << sl[j].type[i] << "," << sl[j].fac[i] << endl;
+        }
+        out<< endl;
+    }
+}
+
 
 int main()
 {
@@ -571,13 +598,14 @@ int main()
     cout << "Maximum 2 lec : " << max_course[2] << endl;
     cout << "Maximum 1 lec : " << max_course[1] << endl;
     int tot_slot = max_course[1] + max_course[2] + max_course[3];
-    cout << "Tota slots required : " << tot_slot << endl<<endl;
+    cout << "Tota slots required : " << tot_slot << endl
+         << endl;
     slot sl[tot_slot];
 
     int sl_num = 1;
     for (int i = 0; i < max_course[3]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 3, count);   //work as a constructor
+        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
         sl_num++;
     }
     for (int i = 0; i < max_course[2]; i++)
@@ -598,7 +626,7 @@ int main()
         if (repeat_course(t, arr[i].get_code(), temp) == 0 && arr[i].isCore())
         {
             temp[t] = arr[i].get_code();
-            cout<<temp[t]<<endl;
+            cout << temp[t] << endl;
             t++;
         }
     }
@@ -619,6 +647,10 @@ int main()
             }
         }
     }
+    /*
+
+    ****Do not remove this for loop****
+
     for (int i = 0; i < t; i++)
     {
         cout << h[i].get_code() << " " << h[i].get_lecture() << "->";
@@ -627,16 +659,21 @@ int main()
             cout << i.get_program() << "," << i.get_sem() << " ";
         }
         cout << endl;
-    }
+    }*/
 
     for (int i = 0; i < tot_slot; i++)
     {
         sl[i].make_slot(count, arr, t, h);
     }
+    /*
+    
+    ***Do not remove thi for loop ***
+    
     for (int i = 0; i < sl_num - 1; i++)
     {
         sl[i].display_slot();
-    }
+    }*/
+    display_slot_in_csv(tot_slot,sl);
 
     return 0;
 }
