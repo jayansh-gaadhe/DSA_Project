@@ -612,7 +612,7 @@ int repeat_slot_in_day(int d, int sl_day[], int slot_num)
     }
     return 0;
 }
-void make_time_table(int total, slot *s)
+/*void make_time_table(int total, slot *s)
 {
 
     //   int arr[6][6] = {{0}, {0}, {0}, {0}, {0},{0}}; // we have total 25 place to put slot in 1 week;
@@ -685,14 +685,14 @@ void make_time_table(int total, slot *s)
                  same_fac[7]=1;
              }
          }
-     }*/
+     }
     int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
     // tt=time table
     /*conditions for Time table
     1.one slot can not repeat on that day
     2.perticular faculty must not have two consecutive lecture
     3.perticular slot should be placed on the basis of lecture of that slot
-    */
+
     int filled_box = 0;
     int total_box = 0;
     for (int i = 0; i < total; i++)
@@ -723,7 +723,7 @@ void make_time_table(int total, slot *s)
                 filled_box++;
                 cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
                 continue;
-            }*/
+            }
             if (i == 1)
             {
                 for (int k =total-1; k >=0 ; k--){
@@ -732,7 +732,7 @@ void make_time_table(int total, slot *s)
                         for(int m=1;m<=5;m++){
                             if(l==tt[m][j-1]){
                                 if(s[l].lec_count<s[l].lecture){
-                                    
+
                                     ran=l;
                                     break;
                                 }
@@ -741,7 +741,7 @@ void make_time_table(int total, slot *s)
                         if(ran!=0){
                             break;
                         }
-                    }*/
+                    }
                     if (s[k].lec_count < s[k].lecture)
                     {
                         tt[i][j] = k+1;
@@ -791,8 +791,172 @@ void make_time_table(int total, slot *s)
         cout << endl;
     }
     cout << "Gautam";
-}
+}*/
 
+void make_time_table(int total, slot *s)
+{
+    int filled_box = 0;
+    int total_box = 0;
+    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
+    for (int i = 0; i < total; i++)
+    {
+        total_box += s[i].lecture;
+    }
+
+    for (int j = 0; j <= 5; j++)
+    {
+        int sl_day[5] = {0}; // slots of day
+        int d = 0;
+
+        if (filled_box == total_box)
+        {
+            break;
+        }
+        for (int i = 0; i <= 5; i++)
+        {
+            if (filled_box == total_box)
+            {
+                break;
+            }
+            if (j % 2 == 0)
+            {
+
+                if (i == 1)
+                {
+                    do
+                    {
+                        if (filled_box == total_box)
+                        {
+                            break;
+                        }
+                        srand(time(0));
+                        
+                            int ran=rand();
+                        if (rand == 0)
+                        {
+                            continue;
+                        }
+                        else if (s[ran].lec_count < s[ran].lecture)
+                        {
+
+                            tt[i][j] = s[ran].slot_num;
+                            sl_day[d] = tt[i][j];
+                            s[ran].lec_count++;
+                            d++;
+                            filled_box++;
+                            cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            break;
+                        }
+                    } while (1);
+                }
+                else
+                {
+                    do
+                    {
+                        if (filled_box == total_box)
+                        {
+                            break;
+                        }
+                        srand(0);
+                        int ran = rand() % 6;
+                        if (rand == 0)
+                        {
+                            continue;
+                        }
+                        else if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[ran]) || repeat_slot_in_day(d, sl_day, ran))
+                        {
+                            continue;
+                        }
+                        else if (s[ran].lec_count < s[ran].lecture)
+                        {
+                            tt[i][j] = s[ran].slot_num;
+                            sl_day[d] = tt[i][j];
+                            s[ran].lec_count++;
+                            d++;
+                            filled_box++;
+                            cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            break;
+                        }
+
+                        /*if (repeat_slot_in_day(d, sl_day, ran))
+                        {
+                            continue;
+                        }*/
+                    } while (1);
+                }
+            }
+            else
+            {
+                if (i == 1)
+                {
+                    for (int k = total - 1; k >= 0; k--)
+                    {
+                        if (filled_box == total_box)
+                        {
+                            break;
+                        }
+                        int ran = 0;
+                        for (int l = 1; l <= total; l++)
+                        {
+                            for (int m = 1; m <= 5; m++)
+                            {
+                                if (l == tt[m][j - 1])
+                                {
+                                    if (s[l].lec_count < s[l].lecture)
+                                    {
+
+                                        ran = l;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (ran != 0)
+                            {
+                                break;
+                            }
+                        }
+                        if (s[k].lec_count < s[k].lecture)
+                        {
+                            tt[i][j] = k + 1;
+                            sl_day[d] = tt[i][j];
+                            s[k].lec_count++;
+                            d++;
+                            filled_box++;
+                            cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                            break;
+                        }
+                    }
+                    continue;
+                }
+                for (int k = total - 1; k >= 0; k--)
+                {
+                    if (filled_box == total_box)
+                    {
+                        break;
+                    }
+                    if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
+                    {
+                        continue;
+                    }
+                    if (repeat_slot_in_day(d, sl_day, k + 1))
+                    {
+                        continue;
+                    }
+                    if (s[k].lec_count < s[k].lecture)
+                    {
+                        tt[i][j] = s[k].slot_num;
+                        sl_day[d] = tt[i][j];
+                        s[k].lec_count++;
+                        d++;
+                        filled_box++;
+                        cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
 int main()
 {
     int count = 0;
@@ -826,9 +990,9 @@ int main()
     slot sl[tot_slot];
 
     int sl_num = 1;
-    for (int i = 0; i < max_course[1]; i++)
+    for (int i = 0; i < max_course[3]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 1, count);
+        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
         sl_num++;
     }
     for (int i = 0; i < max_course[2]; i++)
@@ -836,9 +1000,9 @@ int main()
         sl[sl_num - 1].initialize_slot(sl_num, 2, count);
         sl_num++;
     }
-    for (int i = 0; i < max_course[3]; i++)
+    for (int i = 0; i < max_course[1]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 3, count); // work as a constructor
+        sl[sl_num - 1].initialize_slot(sl_num, 1, count);
         sl_num++;
     }
 
@@ -897,6 +1061,8 @@ int main()
         sl[i].display_slot();
     }*/
     // display_slot_in_csv(tot_slot, sl);
-    make_time_table(tot_slot, sl);
+    //make_time_table(tot_slot, sl);
+    srand(time(0));
+    cout<<rand() % 6<<endl;
     return 0;
 }
