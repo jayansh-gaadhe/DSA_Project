@@ -81,7 +81,7 @@ void PriorityQ ::dequeue()
     int x = -1;
     if (head == NULL)
     {
-        //cout << "Priority Queue is empty!" << endl;
+        // cout << "Priority Queue is empty!" << endl;
     }
     else
     {
@@ -169,6 +169,7 @@ private:
     string pg[100]; // program
     int slot_num;
     int sem[100];
+
     string fac[100];
     int faculty = 0; // number of different faculties
     string type[100];
@@ -210,6 +211,9 @@ public:
     friend void display_slot_in_csv(int tot_sl, slot sl[]);
     friend void make_time_table(int total, slot s[], int (&tt)[6][6]);
     friend int repeat_fac_in_prev_slot(slot prev, slot curr);
+    friend string return_course_for_tt(string prog, int sem, slot sl);
+    friend void pg_wise_tt(int total, slot sl[], int tt[6][6]);
+    friend void fc_wise_tt(slot sl[], int tt[6][6]);
 };
 
 void slot ::set_sem(int s, int i)
@@ -652,7 +656,8 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             code[count] = h[i].get_code();
             pg[count] = j.get_program();
             sem[count] = j.get_sem();
-            set_faculty(j.get_faculty(), count);
+            fac[count] = j.get_faculty();
+            // set_faculty(j.get_faculty(), count);
             type[count] = j.get_type();
             j.set_slot(slot_num);
 
@@ -965,7 +970,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
         p.enqueue(s[i].slot_num, s[i].lecture);
     }
     p.enqueue(0, 25 - total_box);
-    
 
     for (int j = 1; j <= 5; j++)
     {
@@ -981,7 +985,7 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
         int d = 0;
         for (int i = 1; i <= 5; i++)
         {
-            
+
             if (filled_box == 25)
             {
                 break;
@@ -1071,7 +1075,7 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                         if (repeat_slot_in_day(d, sl_day, p.front_sl_num()) || repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[p.front_sl_num()]))
                         {
 
-                            cout << p.front_sl_num() << " " << p.front_priority() << endl;
+                            // cout << p.front_sl_num() << " " << p.front_priority() << endl;
                             if (p.front_sl_num() == 0 && p.front_priority() == 1)
                             {
 
@@ -1130,7 +1134,7 @@ void tt_in_csv(int tt[6][6])
     int e = 9;
     for (int i = 1; i < 6; i++)
     {
-        out << s << ":00 - " << e << ":00 , ";
+        out << s << ":00 - " << s << ":50 , ";
         for (int j = 1; j < 6; j++)
         {
             if (tt[i][j] == 0)
@@ -1146,6 +1150,104 @@ void tt_in_csv(int tt[6][6])
     }
 }
 
+void pg_wise_tt(int total, slot sl[], int tt[6][6])
+{
+    cout << "Enter the program : ";
+    string prog;
+    int sem;
+    cin >> prog;
+    cout << "Enter the sem : ";
+    cin >> sem;
+    ofstream o2;
+    string fname;
+    cout << "Enter the csv file name to store time table of " << prog << "Sem-" << sem << " : ";
+    cin >> fname;
+    o2.open(fname);
+
+    o2 << "Time-Table For " << prog << " Sem-" << sem << endl;
+    o2 << "Time,Monday,Tuesday,Wednesday,Thursday,Friday" << endl;
+
+    int s = 8;
+
+    for (int i = 1; i < 6; i++)
+    {
+        o2 << s << ":00 - " << s << ":50 , ";
+        for (int j = 1; j < 6; j++)
+        {
+            if (tt[i][j] == 0)
+            {
+                o2 << "Free , ";
+                continue;
+            }
+            // string crc = return_course_for_tt(prog, sem, sl[tt[i][j] - 1]);
+            // o2 << crc << " , ";
+            int k;
+            for (k = 0; k < sl[tt[i][j] - 1].count; k++)
+            {
+                if (sl[tt[i][j] - 1].sem[k] == sem && sl[tt[i][j] - 1].pg[k] == prog)
+                {
+                    o2 << sl[tt[i][j] - 1].code[k] << " , ";
+                    break;
+                }
+            }
+            if (k == sl[tt[i][j] - 1].count)
+            {
+                o2 << "Free , ";
+            }
+
+            // o2<<return_course_for_tt(prog,sem,sl[tt[i][j]-1])<<" , ";
+        }
+        s++;
+
+        o2 << endl;
+    }
+}
+void fc_wise_tt(slot sl[], int tt[6][6])
+{
+    string fac;
+    cout << "Enter short name of Faculty : ";
+    cin >> fac;
+    ofstream out;
+    string fname;
+    cout << "Enter the csv file name to store time table of " << fac << " : ";
+    cin >> fname;
+    out.open(fname);
+    int s = 8;
+    out << "Time-Table For " << fac << endl;
+    out << "Time,Monday,Tuesday,Wednesday,Thursday,Friday" << endl;
+
+    for (int i = 1; i < 6; i++)
+    {
+        out << s << ":00 - " << s << ":50 , ";
+        for (int j = 1; j < 6; j++)
+        {
+            if (tt[i][j] == 0)
+            {
+                out << "Free  , ";
+                continue;
+            }
+
+            int k;
+            for (k = 0; k < sl[tt[i][j] - 1].count; k++)
+            {
+                if (sl[tt[i][j] - 1].fac[k] == fac)
+                {
+                    out << sl[tt[i][j] - 1].code[k] << " , ";
+                    break;
+                }
+            }
+            if (k == sl[tt[i][j] - 1].count)
+            {
+                out << "Free  , ";
+            }
+
+            // o2<<return_course_for_tt(prog,sem,sl[tt[i][j]-1])<<" , ";
+        }
+        s++;
+
+        out << endl;
+    }
+}
 int main()
 {
     int count = 0;
@@ -1161,7 +1263,7 @@ int main()
         getline(in, content);
         count++;
     }
-    //cout << "Count is : " << count << endl;
+    // cout << "Count is : " << count << endl;
     Course arr[count];
     for (int i = 0; i < count; i++)
     {
@@ -1254,5 +1356,21 @@ int main()
     int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
     make_time_table(tot_slot, sl, tt);
     tt_in_csv(tt);
+    cout << "Enter 1.For Branch/Program wise time-table." << endl
+         << "Enter 2.For Faculty's time-table." << endl;
+    int n;
+    cin >> n;
+    switch (n)
+    {
+    case 1:
+        pg_wise_tt(tot_slot, sl, tt);
+        break;
+
+    case 2:
+        fc_wise_tt(sl, tt);
+        break;
+    default:
+        cout << "Invalid Integer!! :(" << endl;
+    }
     return 0;
 }
