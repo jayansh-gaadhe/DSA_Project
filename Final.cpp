@@ -183,6 +183,12 @@ private:
     int CS[8] = {0};
     int MNC[8] = {0};
     int EVD[8] = {0};
+    int MICT[8] = {0};
+    int MEC[8] = {0};
+    int MSDS[8] = {0};
+    int MSAA[8] = {0};
+    int MDCD[8] = {0};
+    int PHD[8] = {0};
 
 public:
     void initialize_slot(int n, int l, int size)
@@ -473,6 +479,125 @@ void no_of_slots(int size, Course arr[], int *max)
             max3 = m[3];
         }
     }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MICT", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MEC", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MSIT", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MSDS", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MSAA", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "MDCD", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
+    for (int i = 1; i <= 8; i++)
+    {
+        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
+        count_n_lecture_courses(size, arr, "PHD", i, m);
+        if (m[1] > max1)
+        {
+            max1 = m[1];
+        }
+        if (m[2] > max2)
+        {
+            max2 = m[2];
+        }
+        if (m[3] > max3)
+        {
+            max3 = m[3];
+        }
+    }
     max[1] = max1;
     max[2] = max2;
     max[3] = max3;
@@ -529,6 +654,76 @@ int slot ::check_filled(Course c)
         }
     }
     if (c.get_program() == "EVD")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MICT")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MEC")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MSIT")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MSDS")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MSAA")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "MDCD")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                return EVD[i];
+            }
+        }
+    }
+    if (c.get_program() == "PHD")
     {
         for (int i = 0; i < 8; i++)
         {
@@ -597,6 +792,84 @@ void slot ::fill(Course &c)
             }
         }
     }
+    if (c.get_program() == "MICT")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "MEC")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "MSIT")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "MSDS")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "MSAA")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "MDCD")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    if (c.get_program() == "PHD")
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (c.get_sem() == i)
+            {
+                EVD[i] = 1;
+                return;
+            }
+        }
+    }
+    
 }
 
 void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
@@ -656,8 +929,8 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             code[count] = h[i].get_code();
             pg[count] = j.get_program();
             sem[count] = j.get_sem();
-            fac[count] = j.get_faculty();
-            // set_faculty(j.get_faculty(), count);
+            fac[count]=j.get_faculty();
+            //set_faculty(j.get_faculty(), count);
             type[count] = j.get_type();
             j.set_slot(slot_num);
 
@@ -1075,7 +1348,7 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                         if (repeat_slot_in_day(d, sl_day, p.front_sl_num()) || repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[p.front_sl_num()]))
                         {
 
-                            // cout << p.front_sl_num() << " " << p.front_priority() << endl;
+                            cout << p.front_sl_num() << " " << p.front_priority() << endl;
                             if (p.front_sl_num() == 0 && p.front_priority() == 1)
                             {
 
@@ -1134,7 +1407,7 @@ void tt_in_csv(int tt[6][6])
     int e = 9;
     for (int i = 1; i < 6; i++)
     {
-        out << s << ":00 - " << s << ":50 , ";
+        out << s << ":00 - " << e << ":50 , ";
         for (int j = 1; j < 6; j++)
         {
             if (tt[i][j] == 0)
@@ -1148,6 +1421,18 @@ void tt_in_csv(int tt[6][6])
         e++;
         out << endl;
     }
+}
+
+string return_course_for_tt(string prog, int sem, slot sl)
+{
+    for (int i = 0; i < sl.count; i++)
+    {
+        if (sl.sem[i] == sem && sl.pg[i] == prog)
+        {
+            return sl.code[i];
+        }
+    }
+    return "Free";
 }
 
 void pg_wise_tt(int total, slot sl[], int tt[6][6])
@@ -1213,7 +1498,7 @@ void fc_wise_tt(slot sl[], int tt[6][6])
     cin >> fname;
     out.open(fname);
     int s = 8;
-    out << "Time-Table For " << fac << endl;
+    out << "Time-Table For " << fac <<endl;
     out << "Time,Monday,Tuesday,Wednesday,Thursday,Friday" << endl;
 
     for (int i = 1; i < 6; i++)
@@ -1223,7 +1508,7 @@ void fc_wise_tt(slot sl[], int tt[6][6])
         {
             if (tt[i][j] == 0)
             {
-                out << "Free  , ";
+                out << "Free-1 , ";
                 continue;
             }
 
@@ -1238,13 +1523,13 @@ void fc_wise_tt(slot sl[], int tt[6][6])
             }
             if (k == sl[tt[i][j] - 1].count)
             {
-                out << "Free  , ";
+                out << "Free-2 , ";
             }
 
             // o2<<return_course_for_tt(prog,sem,sl[tt[i][j]-1])<<" , ";
         }
         s++;
-
+        
         out << endl;
     }
 }
