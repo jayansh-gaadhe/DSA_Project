@@ -9,10 +9,10 @@ class Hash
 {
     string code; // key values of hash tables, they are unique.
     int lec;     // No. of lectures of Courses
-    int flag;    // To indicate that particular Course is stored in a slot.
+    int flag;    // To indicate that particular hash(cource) is stored in a slot.
 
 public:
-    list<Course> chain;
+    list<Course> chain;         //list of programs having same courses
 
     void set_code(string s);
     string get_code();
@@ -48,7 +48,7 @@ string Hash ::get_code()
 {
     return code;
 }
-int repeat_course(int size, string s, string arr[])
+int repeat_course(int size, string s, string arr[])     //To check that particular course is unique(means not stored in arr before.)
 {
     for (int i = 0; i < size; i++)
     {
@@ -72,17 +72,16 @@ private:
     // Course *a;
     int lecture;
     int count; // we use count for number of pg/code in this slot
-    int ICTA[9];
-    int ICTB[9];
-    int CS[9];
-    int MNC[9];
-    int EVD[9];
+    int ICTA[8];        //these arrays are indicating that for particular program of a particular sem ,
+                        //a course is alloted in the slot or not
+    int ICTB[8];        
+    int CS[8];          
+    int MNC[8];
+    int EVD[8];
 
 public:
     void initialize_slot(int n, int l, int size)
     {
-        // a=new Course[size];
-
         slot_num = n;
         lecture = l;
         count = 0;
@@ -134,7 +133,7 @@ void slot ::display_slot()
     cout << "Slot : M" << slot_num << endl;
     for (int i = 0; i < count; i++)
     {
-        cout <<sem[i]<<" "<< pg[i] << " "<<code[i] << " "<<lecture<<" " <<type[i]<<" "<<fac[i]<< endl;
+        cout <<"Sem-"<<sem[i]<<" "<< pg[i] << " "<<code[i] << " "<<lecture<<" " <<type[i]<<" "<<fac[i]<< endl;
     }
     cout << endl;
 }
@@ -148,7 +147,8 @@ class Course
     int lecture;
     string program;
     int sem;
-    int ass_slot;
+    int ass_slot;           //ass_slot=0 ,if non slot is assigned to the course
+                            //ass_alot= slot_number , if a slot assigned to the course
 
 public:
     Course()
@@ -189,7 +189,8 @@ string Course ::get_faculty()
     return faculty;
 }
 
-bool repeat_prof(string c, string prof[], int count)
+bool repeat_prof(string c, string prof[], int count)        //To check that in one slot a particular proffesor has only one course.
+                                                            //i.e. one faculty should have only one course in a single slot.
 {
     for (int i = 0; i < count; i++)
     {
@@ -481,15 +482,12 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 
     for (int i = 0; i < h_size; i++)
     {
-        int flag_course[5]={0};
-        int flag_counter=0;
-        string in_prof[65];
-        int in_fac = 0;
-        if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 )
+        if (h[i].get_lecture() != lecture || !h[i].chain.front().isCore() || h[i].get_flag() == 1 || repeat_prof(h[i].chain.front().get_faculty(), prof, fac))
         {
             continue;
         }
-        /*for (auto j : h[i].chain)
+        int ck = 0;
+        for (auto j : h[i].chain)
         {
             if (check_filled(j) == 1)
             {
@@ -500,61 +498,44 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
         if (ck == 1)
         {
             continue;
-        }*/
-        for (auto j : h[i].chain)
-        {   
-            if(j.get_slot()==0 && !check_filled(j)/* && !(!repeat_prof(j.get_faculty(),in_prof,in_fac) && repeat_prof(j.get_faculty(),prof,fac))*/){
-
-                if( (repeat_prof(j.get_faculty(),in_prof,in_fac)==1 && repeat_prof(j.get_faculty(),prof,fac)==1) || repeat_prof(j.get_faculty(),prof,fac)==0)
-
-                {
-                    code[count] = h[i].get_code();
-                    pg[count] = j.get_program();
-                    sem[count]=j.get_sem();
-                    set_faculty(j.get_faculty(),count);
-                    type[count]=j.get_type();
-                    j.set_slot(slot_num);
-                    cout<<j.get_slot()<<endl;
-                    if (repeat_prof(j.get_faculty(), prof, fac) == 0)
-                    {
-                        prof[fac] = j.get_faculty();
-                        fac++;
-                    }
-                    if (repeat_prof(j.get_faculty(), in_prof,in_fac) == 0)
-                    {
-                        in_prof[in_fac] = j.get_faculty();
-                        in_fac++;
-                    }
-                    fill(j);
-                    count++;
-                    flag_course[flag_counter]=1;
-                    flag_counter++;
-                }
-            }
-
-
-
-            // a[count]=j;
         }
-        int ck = 0;
-            /*for(auto j : flag_course){
-                cout<<ck<<endl;
-                if(j==0){
-                    ck=1;
-                    break;
-                }
-            }*/
         ck=0;
-        for(auto j : h[i].chain){
-            if(j.get_slot()==0){
-                ck=1;
+        
+        for (auto j : h[i].chain)
+        {
+            if (repeat_prof(j.get_faculty(),prof,fac) == 1)
+            {
+                ck = 1;
                 break;
             }
         }
-        if(ck==0){
-            h[i].set_flag(1);
+        if (ck == 1)
+        {
+            continue;
         }
 
+        for (auto j : h[i].chain)
+        {
+            
+            code[count] = h[i].get_code();
+            pg[count] = j.get_program();
+            sem[count]=j.get_sem();
+            set_faculty(j.get_faculty(),count);
+            type[count]=j.get_type();
+            j.set_slot(slot_num);
+            
+
+
+            if (repeat_prof(j.get_faculty(), prof, fac) == 0)
+            {
+                prof[fac] = j.get_faculty();
+                fac++;
+            }
+            fill(j);
+            // a[count]=j;
+            count++;
+        }
+        h[i].set_flag(1);
     }
 }
 
@@ -592,7 +573,7 @@ int main()
     int sl_num = 1;
     for (int i = 0; i < max_course[3]; i++)
     {
-        sl[sl_num - 1].initialize_slot(sl_num, 3, count);
+        sl[sl_num - 1].initialize_slot(sl_num, 3, count);   //work as a constructor
         sl_num++;
     }
     for (int i = 0; i < max_course[2]; i++)
@@ -613,6 +594,7 @@ int main()
         if (repeat_course(t, arr[i].get_code(), temp) == 0 && arr[i].isCore())
         {
             temp[t] = arr[i].get_code();
+            cout<<temp[t]<<endl;
             t++;
         }
     }
@@ -628,13 +610,12 @@ int main()
         {
             if (arr[i].get_code() == h[j].get_code())
             {
-
                 h[j].chain.push_front(arr[i]);
                 h[j].set_lecture(arr[i].get_lecture());
             }
         }
     }
-    /*for (int i = 0; i < t; i++)
+    for (int i = 0; i < t; i++)
     {
         cout << h[i].get_code() << " " << h[i].get_lecture() << "->";
         for (auto i : h[i].chain)
@@ -642,7 +623,7 @@ int main()
             cout << i.get_program() << "," << i.get_sem() << " ";
         }
         cout << endl;
-    }*/
+    }
 
     for (int i = 0; i < tot_slot; i++)
     {
@@ -653,10 +634,5 @@ int main()
         sl[i].display_slot();
     }
 
-    /*sl[0].make_slot(count,arr,t,h);
-    sl[0].display_slot();*/
-    /*for(auto i : h){
-        cout<<"Flag "<<i.get_flag()<<endl;
-    }*/
     return 0;
 }
