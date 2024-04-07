@@ -66,9 +66,9 @@ private:
     string code[100];
     string pg[100]; // program
     int slot_num;
-    int sem;
-    string fac;
-
+    int sem[100];
+    string fac[100];
+    string type[100];
     // Course *a;
     int lecture;
     int count; // we use count for number of pg/code in this slot
@@ -100,15 +100,33 @@ public:
     void display_slot();
     int check_filled(Course c);
     void fill(Course &c);
-    void set_sem(int s);
-    void set_faculty(string f);
-    int get_sem();
-    string get_faculty();
-    void set_type(string t);
-    string get_type();
+    void set_sem(int s,int i);
+    void set_faculty(string f,int i);
+    int get_sem(int i);
+    string get_faculty(int i);
+    void set_type(string t,int i);
+    string get_type(int i);
 
 };
 
+void slot :: set_sem(int s,int i){
+    sem[i]=s;
+}
+void slot :: set_faculty(string s,int i){
+    fac[i]=s;  
+}
+int slot :: get_sem(int i){
+    return sem[i];
+}
+string slot :: get_faculty(int i){
+    return fac[i];
+}
+void slot :: set_type(string t,int i){
+    type[i]=t;
+}
+string slot :: get_type(int i){
+    return type[i];
+}
 
 
 void slot ::display_slot()
@@ -116,7 +134,7 @@ void slot ::display_slot()
     cout << "Slot : M" << slot_num << endl;
     for (int i = 0; i < count; i++)
     {
-        cout << code[i] << " " << pg[i] << " "<< endl;
+        cout <<sem[i]<<" "<< pg[i] << " "<<code[i] << " "<<lecture<<" " <<type[i]<<" "<<fac[i]<< endl;
     }
     cout << endl;
 }
@@ -148,7 +166,11 @@ public:
     int get_slot();
     string get_code();
     string get_faculty();
+    string get_type();
 };
+string Course :: get_type(){
+    return type;
+}
 
 string Course ::get_code()
 {
@@ -481,7 +503,11 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
 
             code[count] = h[i].get_code();
             pg[count] = j.get_program();
+            sem[count]=j.get_sem();
+            set_faculty(j.get_faculty(),count);
+            type[count]=j.get_type();
             j.set_slot(slot_num);
+
 
             if (repeat_prof(j.get_faculty(), prof, fac) == 0)
             {
