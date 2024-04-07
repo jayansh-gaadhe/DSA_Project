@@ -96,16 +96,7 @@ void PriorityQ ::dequeue()
     return;
 }
 
-/*void PriorityQ ::display()
-{
-    node *p = head;
-    while (p != NULL)
-    {
-        cout << "data: " << p->sl_num << " and ";
-        cout << "Priority: " << p->priority << endl;
-        p = p->next;
-    }
-}*/
+
 
 class Hash
 {
@@ -173,7 +164,6 @@ private:
     string fac[100];
     int faculty = 0; // number of different faculties
     string type[100];
-    // Course *a;
     int lecture;
     int count; // we use count for number of pg/code in this slot
     int lec_count = 0;
@@ -183,12 +173,6 @@ private:
     int CS[8] = {0};
     int MNC[8] = {0};
     int EVD[8] = {0};
-    int MICT[8] = {0};
-    int MEC[8] = {0};
-    int MSDS[8] = {0};
-    int MSAA[8] = {0};
-    int MDCD[8] = {0};
-    int PHD[8] = {0};
 
 public:
     void initialize_slot(int n, int l, int size)
@@ -479,125 +463,6 @@ void no_of_slots(int size, Course arr[], int *max)
             max3 = m[3];
         }
     }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MICT", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MEC", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MSIT", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MSDS", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MSAA", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "MDCD", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
-    for (int i = 1; i <= 8; i++)
-    {
-        m[0] = m[1] = m[2] = m[3] = m[4] = 0;
-        count_n_lecture_courses(size, arr, "PHD", i, m);
-        if (m[1] > max1)
-        {
-            max1 = m[1];
-        }
-        if (m[2] > max2)
-        {
-            max2 = m[2];
-        }
-        if (m[3] > max3)
-        {
-            max3 = m[3];
-        }
-    }
     max[1] = max1;
     max[2] = max2;
     max[3] = max3;
@@ -654,76 +519,6 @@ int slot ::check_filled(Course c)
         }
     }
     if (c.get_program() == "EVD")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MICT")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MEC")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MSIT")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MSDS")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MSAA")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "MDCD")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                return EVD[i];
-            }
-        }
-    }
-    if (c.get_program() == "PHD")
     {
         for (int i = 0; i < 8; i++)
         {
@@ -792,84 +587,6 @@ void slot ::fill(Course &c)
             }
         }
     }
-    if (c.get_program() == "MICT")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "MEC")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "MSIT")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "MSDS")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "MSAA")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "MDCD")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    if (c.get_program() == "PHD")
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            if (c.get_sem() == i)
-            {
-                EVD[i] = 1;
-                return;
-            }
-        }
-    }
-    
 }
 
 void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
@@ -929,8 +646,7 @@ void slot ::make_slot(int a_size, Course *arr, int h_size, Hash *h)
             code[count] = h[i].get_code();
             pg[count] = j.get_program();
             sem[count] = j.get_sem();
-            fac[count]=j.get_faculty();
-            //set_faculty(j.get_faculty(), count);
+            fac[count] = j.get_faculty();
             type[count] = j.get_type();
             j.set_slot(slot_num);
 
@@ -992,206 +708,8 @@ int repeat_slot_in_day(int d, int sl_day[], int slot_num)
     }
     return 0;
 }
-/*void make_time_table(int total, slot *s)
-{
 
-    //   int arr[6][6] = {{0}, {0}, {0}, {0}, {0},{0}}; // we have total 25 place to put slot in 1 week;
-    /* string slot_1_fac[s[0].count], slot_2_fac[s[1].count], slot_3_fac[s[2].count], slot_4_fac[s[3].count], slot_5_fac[s[4].count];
-     string slot_6_fac[s[5].count], slot_7_fac[s[6].count], slot_8_fac[s[7].count];
-
-     for (int j = 0; j < s[0].count; j++)
-     {
-         slot_1_fac[j] = s[0].get_faculty(j);
-     }
-     for (int j = 0; j < s[1].count; j++)
-     {
-         slot_2_fac[j] = s[1].get_faculty(j);
-     }
-     for (int j = 0; j < s[2].count; j++)
-     {
-         slot_3_fac[j] = s[2].get_faculty(j);
-     }
-     for (int j = 0; j < s[3].count; j++)
-     {
-         slot_4_fac[j] = s[3].get_faculty(j);
-     }
-     for (int j = 0; j < s[4].count; j++)
-     {
-         slot_5_fac[j] = s[4].get_faculty(j);
-     }
-     for (int j = 0; j < s[5].count; j++)
-     {
-         slot_6_fac[j] = s[5].get_faculty(j);
-     }
-     for (int j = 0; j < s[6].count; j++)
-     {
-         slot_7_fac[j] = s[6].get_faculty(j);
-     }
-     for (int j = 0; j < s[7].count; j++)
-     {
-         slot_8_fac[j] = s[7].get_faculty(j);
-     }
-     int same_fac[total];
-     for(int i=0;i<12;i++)
-     {
-         for(int j=0;j<12;j++)
-         {
-             if(slot_1_fac[i]==slot_2_fac[j])
-             {
-                 same_fac[1]=1;
-             }
-             if(slot_1_fac[i]==slot_3_fac[j])
-             {
-                 same_fac[2]=1;
-             }
-             if(slot_1_fac[i]==slot_4_fac[j])
-             {
-                 same_fac[3]=1;
-             }
-             if(slot_1_fac[i]==slot_5_fac[j])
-             {
-                 same_fac[4]=1;
-             }
-             if(slot_1_fac[i]==slot_6_fac[j])
-             {
-                 same_fac[5]=1;
-             }
-             if(slot_1_fac[i]==slot_7_fac[j])
-             {
-                 same_fac[6]=1;
-             }
-             if(slot_1_fac[i]==slot_8_fac[j])
-             {
-                 same_fac[7]=1;
-             }
-         }
-     }
-    int tt[6][6] = {{0}, {0}, {0}, {0}, {0}, {0}};
-    // tt=time table
-    /*conditions for Time table
-    1.one slot can not repeat on that day
-    2.perticular faculty must not have two consecutive lecture
-    3.perticular slot should be placed on the basis of lecture of that slot
-
-    int filled_box = 0;
-    int total_box = 0;
-    int freq_zero = 0;
-    for (int i = 0; i < total; i++)
-    {
-        total_box += s[i].lecture;
-    }
-
-    for (int j = 1; j <= 5; j++)
-    {
-        if (filled_box == total_box)
-        {
-            break;
-        }
-        int sl_day[5] = {0}; // slots of day
-        int d = 0;
-        for (int i = 1; i <= 5; i++)
-        {
-            if (filled_box == total_box)
-            {
-                break;
-            }
-            /*if (i == 1 && j == 1)
-            {
-                tt[i][j] = 1;
-                sl_day[d] = tt[i][j];
-                s[0].lec_count++;
-                d++;
-                filled_box++;
-                cout << i << " " << j << " : " << tt[i][j] << " f : "<<filled_box<<endl;
-                continue;
-            }
-            if (i == 1)
-            {
-                for (int k = total - 1; k >= 0; k--)
-                {
-                    /*   int ran=0;
-                    for(int l=1;l<=total;l++){
-                        for(int m=1;m<=5;m++){
-                            if(l==tt[m][j-1]){
-                                if(s[l].lec_count<s[l].lecture){
-
-                                    ran=l;
-                                    break;
-                                }
-                            }
-                        }
-                        if(ran!=0){
-                            break;
-                        }
-                    }
-                    if (s[k].lec_count < s[k].lecture)
-                    {
-                        tt[i][j] = k + 1;
-                        sl_day[d] = tt[i][j];
-                        s[k].lec_count++;
-                        d++;
-                        filled_box++;
-                        cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
-                        break;
-                    }
-                }
-                continue;
-            }
-            for (int k = total - 1; k >= 0; k--)
-            {
-                if (filled_box == total_box)
-                {
-                    break;
-                }
-                if (tt[i - 1][j] == 0)
-                {
-                    if (repeat_slot_in_day(d, sl_day, k + 1))
-                    {
-                        continue;
-                    }
-                    if (s[k].lec_count < s[k].lecture)
-                    {
-                        tt[i][j] = s[k].slot_num;
-                        sl_day[d] = tt[i][j];
-                        s[k].lec_count++;
-                        d++;
-                        filled_box++;
-                        cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
-                        break;
-                    }
-                }
-                if (repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[k]))
-                {
-                    continue;
-                }
-                if (repeat_slot_in_day(d, sl_day, k + 1))
-                {
-
-                    continue;
-                }
-                if (s[k].lec_count < s[k].lecture)
-                {
-                    tt[i][j] = s[k].slot_num;
-                    sl_day[d] = tt[i][j];
-                    s[k].lec_count++;
-                    d++;
-                    filled_box++;
-                    cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
-                    break;
-                }
-            }
-        }
-    }
-    for (int i = 1; i <= 5; i++)
-    {
-        for (int j = 1; j <= 5; j++)
-        {
-            cout << tt[i][j] << '\t';
-        }
-        cout << endl;
-    }
-    cout << "Gautam";
-}*/
+    
 void PriorityQ ::display()
 {
     node *p = head;
@@ -1229,6 +747,10 @@ void PriorityQ ::dequeue_in_between(int slot)
 }
 void make_time_table(int total, slot *s, int (&tt)[6][6])
 {
+    /*conditions for Time table
+    1.one slot can not repeat on that day
+    2.perticular faculty must not have two consecutive lecture
+    3.perticular slot should be placed on the basis of lecture of that slot*/
     PriorityQ p;
     int filled_box = 0;
     int total_box = 0;
@@ -1276,7 +798,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
 
                 tt[i][j] = p.front_sl_num();
                 filled_box = 25;
-                // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                 break;
             }
             if (i == 1)
@@ -1291,7 +812,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                 d++;
                 filled_box++;
                 p.dequeue();
-                // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                 continue;
             }
             else
@@ -1329,7 +849,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                             d++;
                             filled_box++;
                             p.dequeue();
-                            // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                             for (int m = 0; m < cnt; m++)
                             {
                                 p.enqueue(sl[m], pri[m]);
@@ -1348,7 +867,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                         if (repeat_slot_in_day(d, sl_day, p.front_sl_num()) || repeat_fac_in_prev_slot(s[tt[i - 1][j] - 1], s[p.front_sl_num()]))
                         {
 
-                            cout << p.front_sl_num() << " " << p.front_priority() << endl;
                             if (p.front_sl_num() == 0 && p.front_priority() == 1)
                             {
 
@@ -1373,7 +891,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
                             d++;
                             filled_box++;
                             p.dequeue();
-                            // cout << i << " " << j << " : " << tt[i][j] << " f : " << filled_box << endl;
                             for (int m = 0; m < cnt; m++)
                             {
                                 p.enqueue(sl[m], pri[m]);
@@ -1385,14 +902,6 @@ void make_time_table(int total, slot *s, int (&tt)[6][6])
             }
         }
     }
-    /*for (int i = 1; i <= 5; i++)
-    {
-        for (int j = 1; j <= 5; j++)
-        {
-            cout << tt[i][j] << " ";
-        }
-        cout << endl;
-    }*/
 }
 
 void tt_in_csv(int tt[6][6])
@@ -1407,7 +916,7 @@ void tt_in_csv(int tt[6][6])
     int e = 9;
     for (int i = 1; i < 6; i++)
     {
-        out << s << ":00 - " << e << ":50 , ";
+        out << s << ":00 - " << s << ":50 , ";
         for (int j = 1; j < 6; j++)
         {
             if (tt[i][j] == 0)
@@ -1421,18 +930,6 @@ void tt_in_csv(int tt[6][6])
         e++;
         out << endl;
     }
-}
-
-string return_course_for_tt(string prog, int sem, slot sl)
-{
-    for (int i = 0; i < sl.count; i++)
-    {
-        if (sl.sem[i] == sem && sl.pg[i] == prog)
-        {
-            return sl.code[i];
-        }
-    }
-    return "Free";
 }
 
 void pg_wise_tt(int total, slot sl[], int tt[6][6])
@@ -1464,8 +961,7 @@ void pg_wise_tt(int total, slot sl[], int tt[6][6])
                 o2 << "Free , ";
                 continue;
             }
-            // string crc = return_course_for_tt(prog, sem, sl[tt[i][j] - 1]);
-            // o2 << crc << " , ";
+            
             int k;
             for (k = 0; k < sl[tt[i][j] - 1].count; k++)
             {
@@ -1480,7 +976,6 @@ void pg_wise_tt(int total, slot sl[], int tt[6][6])
                 o2 << "Free , ";
             }
 
-            // o2<<return_course_for_tt(prog,sem,sl[tt[i][j]-1])<<" , ";
         }
         s++;
 
@@ -1498,7 +993,7 @@ void fc_wise_tt(slot sl[], int tt[6][6])
     cin >> fname;
     out.open(fname);
     int s = 8;
-    out << "Time-Table For " << fac <<endl;
+    out << "Time-Table For " << fac << endl;
     out << "Time,Monday,Tuesday,Wednesday,Thursday,Friday" << endl;
 
     for (int i = 1; i < 6; i++)
@@ -1508,7 +1003,7 @@ void fc_wise_tt(slot sl[], int tt[6][6])
         {
             if (tt[i][j] == 0)
             {
-                out << "Free-1 , ";
+                out << "Free  , ";
                 continue;
             }
 
@@ -1523,13 +1018,12 @@ void fc_wise_tt(slot sl[], int tt[6][6])
             }
             if (k == sl[tt[i][j] - 1].count)
             {
-                out << "Free-2 , ";
+                out << "Free  , ";
             }
 
-            // o2<<return_course_for_tt(prog,sem,sl[tt[i][j]-1])<<" , ";
         }
         s++;
-        
+
         out << endl;
     }
 }
